@@ -9,7 +9,6 @@ enum FLAG_HEAD {
 	PATCH,
 };
 
-
 int main(int argc, char ** argv)
 {
 	enum FLAG_HEAD flag = PATCH;
@@ -47,6 +46,7 @@ int main(int argc, char ** argv)
 			exit(0);
 		} else {
 			i=0;
+			j=0;
 			offset = 0;
 			end = strlen(buf);
 			while(buf[i] == ' ' || buf[i] == '\t'){
@@ -76,8 +76,8 @@ int main(int argc, char ** argv)
 						j--;
 					}
 					buf[j+1] = '\r';
-					buf[j+1+1] = '\n';
-					buf[j+1+2] = '\0';
+					buf[j+2] = '\n';
+					buf[j+3] = '\0';
 				}
 				fputs(buf+offset, fp_new);
 			} else if (buf[i] == '{') {

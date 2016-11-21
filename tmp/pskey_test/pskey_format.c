@@ -9,20 +9,16 @@ enum FLAG_HEAD {
 	PATCH,
 };
 
-
 int main(int argc, char ** argv)
 {
 	enum FLAG_HEAD flag = PATCH;
 	int i = 0, j = 0;
 	int offset = 0;
 	int end = 0;
-	printf("argc: %d\r\n", argc);
+	//printf("argc: %d\r\n", argc);
 	if (argc != 2) {
 		printf("format: ./pskey_format inputfile\r\n");
 		return 0;
-	}
-	for(i=0;i<argc;i++) {
-		printf("argv[%d]:%s\r\n", i, argv[i]);
 	}
 	const char comment_head_size = strlen("/*");
 	const char comment_end_size = strlen("*/\r\n");
@@ -39,7 +35,7 @@ int main(int argc, char ** argv)
 			goto error_fp;
 		}
 
-	} else { goto error_unknow; }
+	} else { goto error_inputfile; }
 
 	while (fgets(buf, MAXLINE, fp) != NULL) {
 		if (fp == NULL) {
@@ -47,6 +43,7 @@ int main(int argc, char ** argv)
 			exit(0);
 		} else {
 			i=0;
+			j=0;
 			offset = 0;
 			end = strlen(buf);
 			while(buf[i] == ' ' || buf[i] == '\t'){
@@ -76,8 +73,8 @@ int main(int argc, char ** argv)
 						j--;
 					}
 					buf[j+1] = '\r';
-					buf[j+1+1] = '\n';
-					buf[j+1+2] = '\0';
+					buf[j+2] = '\n';
+					buf[j+3] = '\0';
 				}
 				fputs(buf+offset, fp_new);
 			} else if (buf[i] == '{') {
@@ -110,6 +107,7 @@ error_fp:
 	return 0;
 error_file_format:
 	printf("error format!\r\n");
-error_unknow:
+error_inputfile:
+	printf("error input file!\r\n");
 	return 0;
 }
